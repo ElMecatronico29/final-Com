@@ -1,4 +1,3 @@
-//import './bootstrap';
 import { createApp } from 'vue/dist/vue.esm-bundler';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
@@ -11,11 +10,12 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    wsHost: process.env.MIX_PUSHER_HOST || '127.0.0.1',
+    wsHost: window.location.hostname,
     wsPort: process.env.MIX_PUSHER_PORT || 6001,
+    wssPort: process.env.MIX_PUSHER_PORT || 6001,
     forceTLS: process.env.MIX_PUSHER_SCHEME === 'https',
     disableStats: true,
-    enabledTransports: ['ws', 'wss'], // Asegúrate de que estos transportes están habilitados
+    enabledTransports: ['ws', 'wss'],
 });
 
 const app = createApp({
@@ -37,7 +37,6 @@ const app = createApp({
             isCurrent : false,
             playerNumber:1,
             endGame:false
-            //showCar: false
         }
     },
     methods: {
@@ -116,7 +115,6 @@ const app = createApp({
             })
             .listen('RaceJoin', (e) => {
                 this.playerCount ++;
-                // decir esperando
             })
             .listen('RaceUpdate', (e) => {
                 if (e.playerName === this.playerName) {
@@ -124,9 +122,9 @@ const app = createApp({
                 }else{
                     this.isCurrent = false;
                 }
-                // decir esperando
             })
             .listen('endGame', (e) => {
+                this.stopTimer();
                 this.endGame = true;                
             });
     },

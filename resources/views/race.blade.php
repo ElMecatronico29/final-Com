@@ -31,6 +31,7 @@
                 </div>           
             </div>
             <div v-if="endGame">
+                <h2 v-if="isCreator">Tiempo Total: @{{ timeElapsed }}</h2>
                 <h1>Juego Terminado</h1>
             </div>
             
